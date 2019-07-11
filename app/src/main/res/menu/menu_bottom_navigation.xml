@@ -16,6 +16,6 @@
         android:id="@+id/action_profile"
         android:icon="@android:drawable/ic_menu_view"
 
-        android:title="Item"
+        android:title="Profile"
         app:showAsAction="always" />
 </menu>

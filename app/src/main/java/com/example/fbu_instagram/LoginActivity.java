@@ -34,10 +34,18 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         signUpBtn = findViewById(R.id.signUpBtn);
 
-        loginBtn.setOnClickListener(new View.OnClickListener(){
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if(currentUser!=null){
+            Log.d("LogInActivity", "Login successful");
+            final Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
+        loginBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
                 final String username = usernameInput.getText().toString();
                 final String password = passwordInput.getText().toString();
                 login(username,password);
@@ -74,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Log.e("LoginActivity", "Sign Up Unsuccessful");
                     e.printStackTrace();
+                    return;
                 }
             }
         });
@@ -83,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
-                if(user!= null){
+                if(e== null){
                     Log.d("LogInActivity", "Login successful");
                     final Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
