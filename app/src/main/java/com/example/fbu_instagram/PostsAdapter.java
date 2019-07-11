@@ -16,6 +16,9 @@ import com.parse.ParseFile;
 
 import org.parceler.Parcels;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
@@ -75,6 +78,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         TextView tvHandle;
         ImageView ivImage;
         TextView tvDescription;
+        TextView tvHandleDown;
+        TextView tvCreatedStamp;
 
         public ViewHolder(View view) {
             super(view);
@@ -82,6 +87,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivImage = itemView.findViewById(R.id.ivImage);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             rvPosts = itemView.findViewById(R.id.rvPosts);
+            tvHandleDown = itemView.findViewById(R.id.tvUserDown);
+            tvCreatedStamp = itemView.findViewById(R.id.tvTimeStamp);
             view.setOnClickListener(this);
         }
 
@@ -98,6 +105,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         public void bind(Post post){
             tvHandle.setText(post.getUser().getUsername());
+            tvHandleDown.setText(post.getUser().getUsername());
+            Date timestamp = post.getCreatedAt();
+            DateFormat dateFormat = new SimpleDateFormat("MMMM dd hh:mm");
+            String strDate = dateFormat.format(timestamp);
+            tvCreatedStamp.setText(strDate);
             ParseFile image = post.getImage();
             if(image!= null){
                 Glide.with(context).load(image.getUrl()).into(ivImage);

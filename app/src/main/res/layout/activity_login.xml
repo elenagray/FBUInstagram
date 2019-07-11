@@ -8,9 +8,12 @@
 
     <Button
         android:id="@+id/loginBtn"
-        android:layout_width="82dp"
-        android:layout_height="36dp"
+        android:layout_width="200dp"
+        android:layout_height="34dp"
+        android:background="#3786EB"
         android:text="LOG IN"
+        android:textColor="#FFF"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -21,8 +24,8 @@
 
     <EditText
         android:id="@+id/userInput"
-        android:layout_width="112dp"
-        android:layout_height="46dp"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
         android:layout_marginTop="340dp"
         android:hint="username"
         android:inputType="textShortMessage"
@@ -34,8 +37,8 @@
 
     <EditText
         android:id="@+id/pwInput"
-        android:layout_width="112dp"
-        android:layout_height="46dp"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:hint="password"
         android:inputType="textShortMessage"
@@ -51,6 +54,7 @@
         android:layout_height="36dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:background="#00E0DEDE"
         android:text="SIGN UP"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,8 +65,8 @@
 
     <EditText
         android:id="@+id/emailInput"
-        android:layout_width="112dp"
-        android:layout_height="46dp"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:hint="email"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
