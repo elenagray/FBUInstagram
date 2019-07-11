@@ -18,6 +18,9 @@ public class Post extends ParseObject {
 
     public Post(){}
 
+    public String getTimeStamp(){
+        return getString(KEY_CREATED_AT);
+    }
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
     }
