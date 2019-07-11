@@ -59,7 +59,7 @@ public class ComposeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         descriptionImage = view.findViewById(R.id.description_et);
         createButton = view.findViewById(R.id.createBtn);
-        refreshButton = view.findViewById(R.id.refreshBtn);
+//        refreshButton = view.findViewById(R.id.refreshBtn);
         postImage = view.findViewById(R.id.ivPostImage);
         btnCapture = view.findViewById(R.id.picBtn);
 
@@ -86,12 +86,12 @@ public class ComposeFragment extends Fragment {
             }
         });
 
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadTopPosts();
-            }
-        });
+//        refreshButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                loadTopPosts();
+//            }
+//        });
     }
 
     private void createPost(String description, ParseFile photoFile, ParseUser user){

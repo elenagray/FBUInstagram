@@ -21,9 +21,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
         final FragmentManager fragmentManager = getSupportFragmentManager();
-
-
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -46,7 +45,6 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         //set default selection: TODO
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
