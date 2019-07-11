@@ -3,10 +3,13 @@ package com.example.fbu_instagram;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,12 +28,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     private Context context;
     private List<Post> posts;
+    public int whichFragment;
     RecyclerView rvPosts;
 
 
-    public PostsAdapter(Context context, List<Post> posts) {
+    public PostsAdapter(Context context, List<Post> posts, int whichFragment) {
         this.context = context;
         this.posts = posts;
+        this.whichFragment = whichFragment;
     }
 
     public void clear() {
@@ -53,19 +58,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-
-//           rvPosts.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //clicking on item in rv
-//                Intent intent = new Intent(context, DetailsActivity.class);
-//                intent.putExtra("clicked_post", Parcels.wrap(posts.get(i)));
-//                startActivity(intent);
-//
-//            }
-//            });
             Post post = posts.get(i);
-            viewHolder.bind(post);
+            if(whichFragment == 0){ //for timeline fragment
+
+            }
+            if(whichFragment == 1){//for profile fragment
+
+            }
+
+
+        viewHolder.bind(post);
     }
 
     @Override
@@ -80,6 +82,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         TextView tvDescription;
         TextView tvHandleDown;
         TextView tvCreatedStamp;
+        ImageButton dmButton;
+        ImageButton likeButton;
+        ImageButton commentButton;
+        ImageButton saveButton;
+
+
+
+
 
         public ViewHolder(View view) {
             super(view);
@@ -89,7 +99,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             rvPosts = itemView.findViewById(R.id.rvPosts);
             tvHandleDown = itemView.findViewById(R.id.tvUserDown);
             tvCreatedStamp = itemView.findViewById(R.id.tvTimeStamp);
+            dmButton = itemView.findViewById(R.id.dmBtn);
+            likeButton = itemView.findViewById(R.id.likeBtn);
+            commentButton = itemView.findViewById(R.id.commentBtn);
+            saveButton = itemView.findViewById(R.id.savepostBtn);
             view.setOnClickListener(this);
+
         }
 
         @Override
@@ -104,6 +119,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
 
         public void bind(Post post){
+
+            if(whichFragment==0){
             tvHandle.setText(post.getUser().getUsername());
             tvHandleDown.setText(post.getUser().getUsername());
             Date timestamp = post.getCreatedAt();
@@ -115,8 +132,26 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Glide.with(context).load(image.getUrl()).into(ivImage);
             }
             tvDescription.setText(post.getDescription());
+            }
+            else if(whichFragment==1){
+                tvHandle.setVisibility(View.GONE);
+                tvDescription.setVisibility(View.GONE);
+                tvCreatedStamp.setVisibility(View.GONE);
+                tvHandleDown.setVisibility(View.GONE);
+                commentButton.setVisibility(View.GONE);
+                likeButton.setVisibility(View.GONE);
+                dmButton.setVisibility(View.GONE);
+                saveButton.setVisibility(View.GONE);
+
+                ParseFile image = post.getImage();
+                DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+                int pxWidth = displayMetrics.widthPixels;
+                ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(pxWidth/3,pxWidth/3);
+                ivImage.setLayoutParams(layoutParams);
+                if(image!= null){
+                    Glide.with(context).load(image.getUrl()).into(ivImage);
+                }
+            }
         }
     }
-
-
 }

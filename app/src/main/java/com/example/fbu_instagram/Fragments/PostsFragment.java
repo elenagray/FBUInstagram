@@ -33,6 +33,7 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     protected List<Post> mPosts;
     protected Button btnLogout;
     private SwipeRefreshLayout swipeLayout;
+    protected int whichFragment;
 
     @Nullable
     @Override
@@ -48,9 +49,7 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         rvPosts = view.findViewById(R.id.rvPosts);
         mPosts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), mPosts);
-        rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        setRecyclerView();
         btnLogout = view.findViewById(R.id.logoutBtn);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +71,15 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
 
     }
+
+    protected void setRecyclerView(){
+        adapter = new PostsAdapter(getContext(), mPosts, whichFragment);
+        rvPosts.setAdapter(adapter);
+        whichFragment = 0;
+        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    //load next DATAF ROM API
 
     protected void loadTopPosts(){
         ParseQuery<Post> postsQuery = new ParseQuery<Post>(Post.class);
@@ -100,6 +108,7 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             }
         });
     }
+
 
     @Override
     public void onRefresh() {
