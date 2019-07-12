@@ -104,8 +104,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvNumLikes = itemView.findViewById(R.id.likeNum);
             tvLikedByText = itemView.findViewById(R.id.likedBy);
             view.setOnClickListener(this);
-
-
         }
 
         @Override
