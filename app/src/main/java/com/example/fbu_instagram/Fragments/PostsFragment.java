@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.fbu_instagram.EndlessScrollListener;
 import com.example.fbu_instagram.LoginActivity;
 import com.example.fbu_instagram.PostsAdapter;
 import com.example.fbu_instagram.R;
@@ -28,12 +29,14 @@ import java.util.List;
 
 public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    public static final int FIRST_PAGE = 0;
     protected RecyclerView rvPosts;
     protected PostsAdapter adapter;
     protected List<Post> mPosts;
     protected Button btnLogout;
     private SwipeRefreshLayout swipeLayout;
     protected int whichFragment;
+    private EndlessScrollListener scrollListener;
 
     @Nullable
     @Override
@@ -47,6 +50,7 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         rvPosts = view.findViewById(R.id.rvPosts);
         mPosts = new ArrayList<>();
         setRecyclerView();
@@ -61,30 +65,22 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 startActivity(intent);
             }
         });
-
-
-        loadTopPosts();
-        //create adapter
-        //create data source
-        //set adapter on rv
-        //set layout manager on rv
-
-
+        loadTopPosts(FIRST_PAGE);
     }
 
     protected void setRecyclerView(){
+        whichFragment = 0;
         adapter = new PostsAdapter(getContext(), mPosts, whichFragment);
         rvPosts.setAdapter(adapter);
-        whichFragment = 0;
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(layoutManager);
     }
 
-    //load next DATAF ROM API
-
-    protected void loadTopPosts(){
+    protected void loadTopPosts(int page){
         ParseQuery<Post> postsQuery = new ParseQuery<Post>(Post.class);
         postsQuery.include(Post.KEY_USER);
         postsQuery.setLimit(20);
+        postsQuery.setSkip(page*20);
         postsQuery.addDescendingOrder(Post.KEY_CREATED_AT);
         postsQuery.findInBackground(new FindCallback<Post>() {
             @Override
@@ -103,12 +99,9 @@ public class PostsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                                 + "\n username = " + post.getUser().getUsername());
                     }
                 }
-
-
             }
         });
     }
-
 
     @Override
     public void onRefresh() {
