@@ -6,7 +6,11 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.parceler.Parcel;
+
+import java.util.ArrayList;
 
 @Parcel(analyze = Post.class)
 @ParseClassName("Post")
@@ -15,12 +19,11 @@ public class Post extends ParseObject {
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
     public static final String KEY_CREATED_AT = "createdAt";
+    public static final String LIKED_BY = "likedBy";
+
 
     public Post(){}
 
-    public String getTimeStamp(){
-        return getString(KEY_CREATED_AT);
-    }
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
     }
@@ -52,6 +55,47 @@ public class Post extends ParseObject {
     public void setUser(ParseUser user){
         put(KEY_USER,user);
     }
+
+    public JSONArray getLikedBy() {
+        if (getJSONArray(LIKED_BY) == null) {
+            return new JSONArray();
+        } else {
+            return getJSONArray(LIKED_BY);
+        }
+    }
+
+    public boolean isLiked(){
+        JSONArray a = getLikedBy();
+        for(int i = 0; i < a.length(); i++){
+            try {
+                a.get(i);
+                if(a.getJSONObject(i).getString("objectId").equals(ParseUser.getCurrentUser().getObjectId())){
+                    return true;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public void like() {
+        ParseUser u = ParseUser.getCurrentUser();
+        add(LIKED_BY, u);
+    }
+
+    public void unlike() {
+        ParseUser u = ParseUser.getCurrentUser();
+        ArrayList<ParseUser> users = new ArrayList<>();
+        users.add(u);
+        removeAll(LIKED_BY, users);
+    }
+
+    public int getNumLikes() {
+        return getLikedBy().length();
+    }
+
+
     public static class Query extends ParseQuery<Post> {
         public Query(){
             super(Post.class);

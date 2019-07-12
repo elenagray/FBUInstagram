@@ -86,10 +86,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         ImageButton likeButton;
         ImageButton commentButton;
         ImageButton saveButton;
-
-
-
-
+        TextView tvNumLikes;
+        TextView tvLikedByText;
 
         public ViewHolder(View view) {
             super(view);
@@ -103,7 +101,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             likeButton = itemView.findViewById(R.id.likeBtn);
             commentButton = itemView.findViewById(R.id.commentBtn);
             saveButton = itemView.findViewById(R.id.savepostBtn);
+            tvNumLikes = itemView.findViewById(R.id.likeNum);
+            tvLikedByText = itemView.findViewById(R.id.likedBy);
             view.setOnClickListener(this);
+
 
         }
 
@@ -118,15 +119,43 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }
         }
 
-        public void bind(Post post){
+        public void bind(final Post post){
+
+
 
             if(whichFragment==0){
+
+                tvNumLikes.setText(Integer.toString(post.getNumLikes()));
             tvHandle.setText(post.getUser().getUsername());
             tvHandleDown.setText(post.getUser().getUsername());
             Date timestamp = post.getCreatedAt();
             DateFormat dateFormat = new SimpleDateFormat("MMMM dd hh:mm");
             String strDate = dateFormat.format(timestamp);
             tvCreatedStamp.setText(strDate);
+            if(post.isLiked()){
+                likeButton.setImageResource(R.drawable.ic_like_filled);
+            }
+            else{
+                likeButton.setImageResource(R.drawable.ic_like);
+            }
+
+            likeButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        if(!post.isLiked()){
+                            //like it
+                            post.like();
+                            likeButton.setImageResource(R.drawable.ic_like_filled);
+
+                        }
+                        else{
+                            post.unlike();
+                            likeButton.setImageResource(R.drawable.ic_like);
+                        }
+                        post.saveInBackground(); //save to the internet
+                        tvNumLikes.setText(Integer.toString(post.getNumLikes()));
+                    }
+                });
             ParseFile image = post.getImage();
             if(image!= null){
                 Glide.with(context).load(image.getUrl()).into(ivImage);
@@ -134,6 +163,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvDescription.setText(post.getDescription());
             }
             else if(whichFragment==1){
+                tvLikedByText.setVisibility(View.GONE);
                 tvHandle.setVisibility(View.GONE);
                 tvDescription.setVisibility(View.GONE);
                 tvCreatedStamp.setVisibility(View.GONE);
@@ -142,6 +172,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 likeButton.setVisibility(View.GONE);
                 dmButton.setVisibility(View.GONE);
                 saveButton.setVisibility(View.GONE);
+                likeButton.setVisibility(View.GONE);
+                tvNumLikes.setVisibility(View.GONE);
 
                 ParseFile image = post.getImage();
                 DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
